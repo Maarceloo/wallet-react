@@ -6,7 +6,6 @@ import Wallet from './pages/Wallet';
 function App() {
   return (
     <Switch>
-      {/* cor do logim diferente, estranho! */}
       <Route exact path="/" component={ Login } />
       <Route path="/carteira" component={ Wallet } />
     </Switch>
