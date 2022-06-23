@@ -1,9 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { walletActionfeth } from '../actions';
 
 class Wallet extends React.Component {
+  state = {
+    moedas: [],
+  }
+
+  currenciesFeth = async () => {
+    const URL = 'https://economia.awesomeapi.com.br/json/all';
+    const dados = await fetch(URL).then((response) => response.json());
+    delete dados.USDT;
+    const listaMoedas = Object.keys(dados);
+    this.setState({ moedas: [dados] });
+    const { dispatch } = this.props;
+    dispatch(walletActionfeth(listaMoedas));
+  };
+
   render() {
+    const { moedas } = this.state;
+    if (moedas.length === 0) {
+      this.currenciesFeth();
+    }
     const { userEmail } = this.props;
     return (
       <header>
@@ -17,6 +36,7 @@ class Wallet extends React.Component {
 
 Wallet.propTypes = {
   userEmail: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
