@@ -30,16 +30,6 @@ class Wallet extends React.Component {
     this.setState({ exchangeRates: dados });
   };
 
-  // somaTotal = () => {
-  //   const { elementosExpense } = this.props;
-  //   const total = elementosExpense.reduce((acc, item) => {
-  //     const { currency, value, exchangeRates } = item;
-  //     const conver = exchangeRates[currency].ask;
-  //     return acc + (value * conver);
-  //   }, 0);
-  //   return total.toFixed(2);
-  // };
-
   salvaStore = async () => {
     const { id } = this.state;
     const MAGIC_NUMBER = id + 1;
@@ -54,7 +44,6 @@ class Wallet extends React.Component {
       tag: '',
       exchangeRates: '',
     });
-    // this.somaTotal();
   };
 
   handleChange = ({ target }) => {
@@ -72,10 +61,8 @@ class Wallet extends React.Component {
 
   render() {
     const { userEmail, moedaState, elementosExpense } = this.props;
-    console.log(elementosExpense);
     const total = elementosExpense.reduce((acc, item) => {
       const { currency, value, exchangeRates } = item;
-      console.log(exchangeRates[currency].ask);
       const conver = exchangeRates[currency].ask;
       return acc + (value * conver);
     }, 0);
@@ -87,38 +74,38 @@ class Wallet extends React.Component {
           <h5 data-testid="total-field">{ total.toFixed(2) }</h5>
           <h5 data-testid="header-currency-field">BRL</h5>
         </header>
-        <div id="formulario">
-          <form>
-            <label htmlFor="value">
-              <input
-                id="value"
-                value={ value }
-                onChange={ this.handleChange }
-                type="number"
-                data-testid="value-input"
-                placeholder="Despesas"
-              />
-            </label>
-            <label htmlFor="description">
-              <input
-                id="description"
-                value={ description }
-                onChange={ this.handleChange }
-                type="text"
-                data-testid="description-input"
-                placeholder="Descrição de gastos"
-              />
-            </label>
-            <label htmlFor="moeda">
-              Moeda
-              <select id="moeda" value={ currency } onChange={ this.handleChange }>
-                {moedaState && moedaState.map((elemento, index) => (
-                  <option value={ elemento } key={ index }>
-                    {elemento}
-                  </option>
-                ))}
-              </select>
-            </label>
+        <form>
+          <label htmlFor="value">
+            <input
+              id="value"
+              value={ value }
+              onChange={ this.handleChange }
+              type="number"
+              data-testid="value-input"
+              placeholder="Despesas"
+            />
+          </label>
+          <label htmlFor="description">
+            <input
+              id="description"
+              value={ description }
+              onChange={ this.handleChange }
+              type="text"
+              data-testid="description-input"
+              placeholder="Descrição de gastos"
+            />
+          </label>
+          <label htmlFor="moeda">
+            Moeda
+            <select id="moeda" value={ currency } onChange={ this.handleChange }>
+              {moedaState && moedaState.map((elemento, index) => (
+                <option value={ elemento } key={ index }>
+                  {elemento}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label htmlFor="method">
             <select
               data-testid="method-input"
               id="method"
@@ -129,6 +116,8 @@ class Wallet extends React.Component {
               <option value="Cartão de crédito">Cartão de crédito</option>
               <option value="Cartão de débito">Cartão de débito</option>
             </select>
+          </label>
+          <label htmlFor="tag">
             <select
               data-testid="tag-input"
               id="tag"
@@ -141,22 +130,41 @@ class Wallet extends React.Component {
               <option value="Transporte">Transporte</option>
               <option value="Saúde">Saúde</option>
             </select>
-            <button type="button" onClick={ this.salvaStore }>
-              Adicionar despesa
-            </button>
-          </form>
-        </div>
-        <table id="tabela">
-          <th id="descricao">Descrição</th>
-          <th id="taag">Tag</th>
-          <th id="metodoPagamento">Método de pagamento</th>
-          <th id="valor">Valor</th>
-          <th id="moedas">Moeda</th>
-          <th id="cambio">Câmbio utilizado</th>
-          <th id="valorConvertido">Valor convertido</th>
-          <th id="moedaDeConversao">Moeda de conversão</th>
-          <th>Editar/Excluir</th>
+          </label>
+          <button type="button" onClick={ this.salvaStore }>
+            Adicionar despesa
+          </button>
+        </form>
+        <table>
+          <tfoot id="tabela">
+            <tr>
+              <th id="descricao">Descrição</th>
+              <th id="taag">Tag</th>
+              <th id="metodoPagamento">Método de pagamento</th>
+              <th id="valor">Valor</th>
+              <th id="moedas">Moeda</th>
+              <th id="cambio">Câmbio utilizado</th>
+              <th id="valorConvertido">Valor convertido</th>
+              <th id="moedaDeConversao">Moeda de conversão</th>
+              <th>Editar/Excluir</th>
+            </tr>
+          </tfoot>
         </table>
+        <div id="elementosRenderizados">
+          {elementosExpense.map((item) => (
+            <tr key={ item.id }>
+              <td>{item.description}</td>
+              <td>{item.tag}</td>
+              <td>{item.method}</td>
+              <td>{Number(item.value).toFixed(2)}</td>
+              <td>{item.exchangeRates[item.currency].name}</td>
+              <td>{Number(item.exchangeRates[item.currency].ask).toFixed(2)}</td>
+              <td>{(item.value * item.exchangeRates[item.currency].ask).toFixed(2)}</td>
+              <td>Real</td>
+
+            </tr>
+          ))}
+        </div>
       </>
     );
   }
