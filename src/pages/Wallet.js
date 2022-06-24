@@ -8,9 +8,9 @@ class Wallet extends React.Component {
     id: -1,
     value: '',
     description: '',
-    currency: '',
-    method: '',
-    tag: '',
+    currency: 'USD',
+    method: 'Dinheiro',
+    tag: 'Lazer',
     exchangeRates: '',
   };
 
@@ -39,9 +39,9 @@ class Wallet extends React.Component {
     this.setState({
       value: '',
       description: '',
-      currency: '',
-      method: '',
-      tag: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Lazer',
       exchangeRates: '',
     });
   };
@@ -58,6 +58,8 @@ class Wallet extends React.Component {
   componentDidMount = () => {
     this.currenciesFeth();
   };
+
+  // delete = () => {};
 
   render() {
     const { userEmail, moedaState, elementosExpense } = this.props;
@@ -161,7 +163,13 @@ class Wallet extends React.Component {
               <td>{Number(item.exchangeRates[item.currency].ask).toFixed(2)}</td>
               <td>{(item.value * item.exchangeRates[item.currency].ask).toFixed(2)}</td>
               <td>Real</td>
-
+              <button
+                type="button"
+                data-testid="delete-btn"
+                // onClick={ this.delete(item.id) }
+              >
+                Excluir
+              </button>
             </tr>
           ))}
         </div>
