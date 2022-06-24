@@ -32,11 +32,12 @@ class Wallet extends React.Component {
 
   // somaTotal = () => {
   //   const { elementosExpense } = this.props;
-  //   const total = elementosExpense.reducer((acc, item) => {
+  //   const total = elementosExpense.reduce((acc, item) => {
   //     const { currency, value, exchangeRates } = item;
   //     const conver = exchangeRates[currency].ask;
   //     return acc + (value * conver);
   //   }, 0);
+  //   return total.toFixed(2);
   // };
 
   salvaStore = async () => {
@@ -71,20 +72,22 @@ class Wallet extends React.Component {
 
   render() {
     const { userEmail, moedaState, elementosExpense } = this.props;
+    console.log(elementosExpense);
     const total = elementosExpense.reduce((acc, item) => {
       const { currency, value, exchangeRates } = item;
+      console.log(exchangeRates[currency].ask);
       const conver = exchangeRates[currency].ask;
       return acc + (value * conver);
     }, 0);
     const { value, description, currency, method, tag } = this.state;
     return (
       <>
-        <header>
+        <header id="header">
           <h3 data-testid="email-field">{userEmail.email}</h3>
           <h5 data-testid="total-field">{ total.toFixed(2) }</h5>
           <h5 data-testid="header-currency-field">BRL</h5>
         </header>
-        <div>
+        <div id="formulario">
           <form>
             <label htmlFor="value">
               <input
@@ -143,6 +146,17 @@ class Wallet extends React.Component {
             </button>
           </form>
         </div>
+        <table id="tabela">
+          <th id="descricao">Descrição</th>
+          <th id="taag">Tag</th>
+          <th id="metodoPagamento">Método de pagamento</th>
+          <th id="valor">Valor</th>
+          <th id="moedas">Moeda</th>
+          <th id="cambio">Câmbio utilizado</th>
+          <th id="valorConvertido">Valor convertido</th>
+          <th id="moedaDeConversao">Moeda de conversão</th>
+          <th>Editar/Excluir</th>
+        </table>
       </>
     );
   }
